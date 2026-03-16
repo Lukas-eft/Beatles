@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="beatleslogo.png">
+    <link rel="icon" type="image/png" href="/beatleslogo.png">
 
     <style>
         /* --- CSS VARIABLES --- */
@@ -111,6 +111,11 @@
             overflow: hidden;
             background: url('zebrastreifen.png') center/cover no-repeat fixed;
         }
+        /* Parallax nur auf PC, da Handys 'fixed' nicht unterstützen */
+@media (min-width: 1025px) {
+    #hero {
+        background-attachment: fixed;
+    }}
 
         #hero::before {
             content: '';
@@ -701,11 +706,11 @@
 .card-number {
     font-family: var(--font-display);
     font-size: 6rem; 
-    color: rgba(217, 37, 37, 0.07); /* Sehr dezent, damit es professionell bleibt */
+    color: rgba(217, 37, 37, 0.22); /* Deckkraft auf 0.22 erhöht */
     position: absolute;
-    top: -1.5rem; /* Zieht die Zahl nach oben aus dem Textbereich */
+    top: -1.5rem;
     left: 0.5rem;
-    z-index: 0; /* Ganz nach hinten */
+    z-index: 0;
     line-height: 1;
     pointer-events: none;
     user-select: none;
