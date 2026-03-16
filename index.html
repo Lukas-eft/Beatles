@@ -104,12 +104,13 @@
         #hero {
             position: relative;
             height: 100vh;
+            height: 100svh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             overflow: hidden;
-            background: url('zebrastreifen.png') center/cover no-repeat fixed;
+            background: url('zebrastreifen.png') center/cover no-repeat ;
         }
         /* Parallax nur auf PC, da Handys 'fixed' nicht unterstützen */
 @media (min-width: 1025px) {
@@ -121,8 +122,9 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at center, rgba(17,19,21,0.5) 0%, rgba(17,19,21,1) 100%);
-        }
+            background: linear-gradient(180deg, rgba(17,19,21,0.3) 0%, rgba(17,19,21,0.8) 100%);
+}
+        
 
         .hero-content {
             position: relative;
