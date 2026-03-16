@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE BEATLES | Lukas Eifertinger</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/beatleslogo.png">
+
+    <style>
+        /* --- CSS VARIABLES --- */
+        :root {
+            --bg-color: #111315; /* Sehr tiefes, kühles Vinyl-Grau */
+            --text-main: #F4F4F0; /* Off-White für besseren Vintage-Look */
+            --text-muted: #8E959E;
+            --red-accent: #D92525; /* Britisches Vintage-Rot */
+            --surface: #1C1F24;
+            
+            --font-display: 'Oswald', sans-serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        /* --- RESET & BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, .display-font {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .red-line {
+            width: 80px;
+            height: 4px;
+            background-color: var(--red-accent);
+            margin: 1.5rem 0 2.5rem 0;
+            display: block;
+        }
+
+        .red-line.center {
+            margin: 1.5rem auto 2.5rem auto;
+        }
+
+        /* --- PRELOADER (Spinning Record) --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease;
+        }
+
+        .record-spinner {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 4px solid var(--surface);
+            border-top-color: var(--red-accent);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- HERO SECTION --- */
+        #hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            background: url('zebrastreifen.png') center/cover no-repeat fixed;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(17,19,21,0.5) 0%, rgba(17,19,21,1) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-size: clamp(4rem, 15vw, 12rem);
+            line-height: 0.9;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            text-shadow: 0 10px 40px rgba(0,0,0,0.9);
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-body);
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            color: var(--red-accent);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* --- SECTION: THE BAND (Square Vinyl Style) --- */
+        #band {
+            padding: 8rem 5%;
+            background: var(--bg-color);
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+            max-width: 600px;
+        }
+
+        .section-header.center {
+            margin: 0 auto 4rem auto;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--text-main);
+            line-height: 1.1;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .member-card {
+            position: relative;
+            aspect-ratio: 1 / 1; /* Quadratisch wie eine Schallplatte */
+            overflow: hidden;
+            background: var(--surface);
+            cursor: crosshair;
+        }
+
+        .member-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Vintage Sepia Filter statt Grayscale */
+            filter: sepia(60%) contrast(1.2) brightness(0.8);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+        }
+
+        .member-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(17,19,21,0.95) 0%, rgba(17,19,21,0.4) 40%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+        }
+
+        .member-details {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .member-card h3 {
+            font-size: 2.2rem;
+            margin-bottom: 0.2rem;
+            color: var(--text-main);
+        }
+
+        .member-card p {
+            color: var(--text-main);
+            font-size: 0.9rem;
+            font-weight: 400;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        /* Desktop Hover Effects */
+        @media (hover: hover) {
+            .member-card:hover .member-img {
+                transform: scale(1.08);
+                /* Reveal full color on hover */
+                filter: sepia(0%) contrast(1.1) brightness(1);
+            }
+            .member-card:hover .member-details {
+                max-height: 150px;
+            }
+            .member-card:hover p {
+                transform: translateY(0);
+                opacity: 1;
+                transition-delay: 0.1s;
+            }
+        }
+
+        /* --- SECTION: MASTERPIECES --- */
+        #masterpieces {
+            padding: 8rem 5%;
+            background: var(--surface);
+            overflow: hidden;
+        }
+
+        .track-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .track-item {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 7vw, 6rem);
+            color: var(--bg-color); /* Gestanzt in den Hintergrund */
+            -webkit-text-stroke: 1px var(--text-muted); /* Outlined Text */
+            text-transform: uppercase;
+            line-height: 1.1;
+            cursor: crosshair;
+            transition: all 0.4s ease;
+            white-space: nowrap;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .track-desc {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--text-main);
+            display: block;
+            margin-top: 0.5rem;
+            letter-spacing: 0;
+            text-transform: none;
+            -webkit-text-stroke: 0;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.4s ease;
+        }
+
+        /* Desktop Hover für Tracks */
+        @media (hover: hover) {
+            .track-item:hover {
+                color: var(--red-accent);
+                -webkit-text-stroke: 0;
+                padding-left: 30px;
+            }
+            .track-item:hover .track-desc {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* --- SECTION: TIMELINE --- */
+        #timeline {
+            padding: 8rem 5%;
+            background: var(--bg-color);
+            position: relative;
+        }
+
+        .timeline-container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            height: 100%;
+            width: 2px;
+            background: var(--surface);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 5rem;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Diamond Indicator statt Kreis */
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 14px;
+            top: 12px;
+            width: 14px;
+            height: 14px;
+            background: var(--bg-color);
+            border: 2px solid var(--red-accent);
+            transform: rotate(45deg); /* Macht es zur Raute */
+            transition: background 0.4s ease, transform 0.4s ease;
+        }
+
+        .timeline-item:hover::before {
+            background: var(--red-accent);
+            transform: rotate(45deg) scale(1.3);
+            box-shadow: 0 0 20px rgba(217, 37, 37, 0.4);
+        }
+
+        .timeline-year {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            color: var(--text-main);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .timeline-content h4 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--red-accent);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 4rem 5%;
+            text-align: center;
+            background: var(--bg-color);
+            border-top: 1px solid var(--surface);
+        }
+
+        footer p {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+        }
+
+        /* --- BULLETPROOF ANIMATIONS --- */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(40px) scale(0.98); /* Leichter Zoom-Effekt für Dynamik */
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+        }
+
+        .reveal-element.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Desktop Adjustments Timeline */
+        @media (min-width: 768px) {
+            .timeline-container::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .timeline-item {
+                width: 50%;
+                padding-left: 0;
+            }
+            .timeline-item:nth-child(odd) {
+                left: 0;
+                padding-right: 60px;
+                text-align: right;
+            }
+            .timeline-item:nth-child(even) {
+                left: 50%;
+                padding-left: 60px;
+            }
+            .timeline-item:nth-child(odd)::before {
+                left: auto;
+                right: -8px;
+            }
+            .timeline-item:nth-child(even)::before {
+                left: -8px;
+            }
+        }
+
+        /* =========================================
+           MOBILE OPTIMIZATION
+           ========================================= */
+        @media (max-width: 768px) {
+            
+            #band, #timeline, #masterpieces {
+                padding: 5rem 5%;
+            }
+
+            .hero-title {
+                font-size: 4.5rem; 
+            }
+            .hero-subtitle {
+                font-size: 0.8rem;
+                letter-spacing: 0.25em;
+            }
+            .section-header {
+                margin-bottom: 2.5rem;
+            }
+
+            /* BAND KARTEN: Texte sofort einblenden */
+            .member-card {
+                aspect-ratio: auto;
+                min-height: 350px;
+            }
+            .member-overlay {
+                background: linear-gradient(to top, rgba(17,19,21,1) 0%, rgba(17,19,21,0.6) 50%, transparent 100%);
+                padding: 1.5rem;
+            }
+            .member-details {
+                max-height: 200px;
+            }
+            .member-card h3 {
+                font-size: 2rem;
+            }
+            .member-card p {
+                transform: translateY(0);
+                opacity: 1;
+                font-size: 0.9rem;
+            }
+
+            /* TRACKS: Umbrüche erlauben, immer sichtbar */
+            .track-item {
+                white-space: normal;
+                font-size: 2.5rem;
+                color: var(--text-main);
+                -webkit-text-stroke: 0;
+                border-bottom: none;
+                margin-bottom: 2rem;
+                padding: 0;
+            }
+            .track-desc {
+                opacity: 1;
+                transform: translateX(0);
+                margin-top: 0.5rem;
+                font-size: 0.95rem;
+                color: var(--text-muted);
+            }
+
+            /* TIMELINE: Enger an den Rand */
+            .timeline-year {
+                font-size: 2.5rem;
+            }
+            .timeline-item {
+                padding-left: 45px;
+                margin-bottom: 3.5rem;
+            }
+            .timeline-container::before {
+                left: 12px;
+            }
+            .timeline-item::before {
+                left: 6px;
+                width: 12px;
+                height: 12px;
+                top: 14px;
+            }
+        }
+        .audio-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        border-radius: 12px;
+        overflow: hidden; /* Rundet die Ecken des iFrames ab */
+        border: 1px solid var(--surface);
+    }
+
+/* Video-Bereich Design */
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.video-card {
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: transform 0.3s ease;
+    text-decoration: none; /* Entfernt Unterstreichung beim Link */
+    display: block;
+}
+
+.video-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--red-accent);
+}
+
+.video-thumb-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-thumb-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(50%) contrast(1.1) brightness(0.7); /* Dein Vintage-Look */
+    transition: filter 0.3s ease;
+}
+
+.video-card:hover img {
+    filter: sepia(0%) contrast(1) brightness(1);
+}
+
+/* Der Play-Button in der Mitte */
+.play-overlay {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: var(--red-accent);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+.play-overlay::after {
+    content: '';
+    width: 0; height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 15px solid white;
+    margin-left: 5px;
+}
+
+.video-info {
+    padding: 1.5rem;
+    color: var(--text-main);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- QUIZ STYLES --- */
+#quiz-section {
+    padding: 8rem 5%;
+    background: var(--bg-color);
+}
+
+.quiz-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--surface);
+    padding: 2.5rem;
+    border-radius: 4px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.question-text {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: var(--text-main);
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.option-btn {
+    background: transparent;
+    border: 1px solid var(--text-muted);
+    padding: 1rem 1.5rem;
+    color: var(--text-main);
+    font-family: var(--font-body);
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option-btn:hover {
+    border-color: var(--red-accent);
+    background: rgba(217, 37, 37, 0.05);
+}
+
+.option-btn.correct {
+    background: #2ecc71 !important;
+    border-color: #2ecc71 !important;
+    color: white;
+}
+
+.option-btn.wrong {
+    background: var(--red-accent) !important;
+    border-color: var(--red-accent) !important;
+    color: white;
+}
+
+#quiz-feedback {
+    margin-top: 2rem;
+    font-weight: 400;
+    min-height: 1.5rem;
+}
+
+#next-quiz-btn:hover {
+    background: var(--red-accent) !important;
+    color: white !important;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3rem;
+    margin-top: 4rem;
+}
+
+.info-card {
+    background: var(--surface);
+    padding: 3rem 2rem;
+    text-align: center;
+    border-top: 3px solid transparent;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.info-card:hover {
+    transform: translateY(-10px);
+    border-top: 3px solid var(--red-accent);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+.info-icon {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--red-accent);
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.info-card h3 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.info-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+.pro-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 4rem;
+    margin-top: 5rem;
+}
+
+.pro-card {
+    position: relative;
+    padding: 1.5rem; /* Gleiches Padding für alle Seiten */
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    transition: border-color 0.4s ease;
+}
+
+.card-number {
+    font-family: var(--font-display);
+    font-size: 6rem; 
+    color: rgba(217, 37, 37, 0.07); /* Sehr dezent, damit es professionell bleibt */
+    position: absolute;
+    top: -1.5rem; /* Zieht die Zahl nach oben aus dem Textbereich */
+    left: 0.5rem;
+    z-index: 0; /* Ganz nach hinten */
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+}
+
+.pro-card h3 {
+    position: relative;
+    z-index: 2; /* Liegt sicher über der Zahl */
+    margin-top: 2.5rem; /* Schiebt die Überschrift nach unten, weg von der Zahl */
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--text-main);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.pro-card p {
+    position: relative;
+    z-index: 2; /* Liegt sicher über der Zahl */
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    text-align: left; /* Linksbündig wirkt sauberer bei schmalen Spalten */
+}
+
+.pro-card:hover {
+    border-left: 1px solid var(--red-accent);
+}
+    </style>
+</head>
+<body>
+
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="record-spinner"></div>
+    </div>
+
+    <main>
+        <!-- HERO -->
+        <section id="hero">
+            <div class="hero-content reveal-element active">
+                <div class="hero-subtitle">Eine musikalische Revolution.</div>
+                <h1 class="hero-title">The<br>Beatles</h1>
+                <div class="hero-subtitle" style="color: var(--text-main); font-size: 0.9rem; margin-top: 1rem; letter-spacing: 0.1em; font-weight: 300;"></div>
+            </div>
+        </section>
+
+        <!-- THE BAND -->
+        <section id="band">
+            <div class="section-header reveal-element">
+                <h2 class="section-title">Die Band</h2>
+                <span class="red-line"></span>
+                
+            </div>
+
+            <div class="grid-cards">
+                <!-- John -->
+                <div class="member-card reveal-element" style="transition-delay: 0.1s;">
+                    <img src="john.png" alt="John Lennon" class="member-img">
+                    <div class="member-overlay">
+                        <h3>John Lennon</h3>
+                        <div class="member-details">
+                            <p>Rhythmusgitarre, Poesie. Der eher Rebellische.<br></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paul -->
+                <div class="member-card reveal-element" style="transition-delay: 0.2s;">
+                    <img src="paul.png" alt="Paul McCartney" class="member-img">
+                    <div class="member-overlay">
+                        <h3>Paul McCartney</h3>
+                        <div class="member-details">
+                            <p>Bass, Melodie. Oft auch "Das musikalische Wunderkind" genannt.<br>Ein Gespür für Lieder das unvergleichlich ist.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- George -->
+                <div class="member-card reveal-element" style="transition-delay: 0.3s;">
+                    <img src="george.png" alt="George Harrison" class="member-img">
+                    <div class="member-overlay">
+                        <h3>George Harrison</h3>
+                        <div class="member-details">
+                            <p>Leadgitarre.<br>Wird oft als Tiefgründig und musikalisch Brilliant bezeichnet.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ringo -->
+                <div class="member-card reveal-element" style="transition-delay: 0.4s;">
+                    <img src="ringo.png" alt="Ringo Starr" class="member-img">
+                    <div class="member-overlay">
+                        <h3>Ringo Starr</h3>
+                        <div class="member-details">
+                            <p>Drums, Rhythmus. Das Herz der Band.<br></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MASTERPIECES -->
+        <section id="masterpieces">
+            <div class="section-header reveal-element">
+                <h2 class="section-title">Die Meisterwerke</h2>
+                <span class="red-line"></span>
+            </div>
+            
+            <div class="track-list reveal-element">
+                <div class="track-item">A Day in the Life <span class="track-desc">Zwei unfertige Songs ineinander verschmolzen.</span></div>
+                <div class="track-item">Come Together <span class="track-desc">Rauer Groove.</span></div>
+                <div class="track-item">Yesterday <span class="track-desc">Meistgecoverede Song aller Zeiten.</span></div>
+                <div class="track-item">Hey Jude <span class="track-desc">Sieben minuten Melodie.</span></div>
+            </div>
+        </section>
+
+        <section id="historical-context" style="padding: 8rem 5%; background: var(--bg-color);">
+    <div class="section-header reveal-element center text-center">
+        <p style="color: var(--red-accent); letter-spacing: 3px; font-weight: bold; margin-bottom: 1rem;">HISTORISCHE EINORDNUNG</p>
+        <h2 class="section-title">Phänomen & Vermächtnis</h2>
+        <span class="red-line center"></span>
+    </div>
+
+    <div class="pro-info-grid">
+        <article class="pro-card reveal-element">
+            <div class="card-number">01</div>
+            <h3>Musikalische Innovation</h3>
+            <p>Die Beatles transformierten den klassischen Rock ’n’ Roll in eine eigne Kunstform. Durch den Einsatz neuartiger Studiotechniken (Multitracking, Rückwärtsschleifen) und Instrumente wie der Sitar veränderten sie die Musikproduktion bis heute.</p>
+        </article>
+
+        <article class="pro-card reveal-element" style="transition-delay: 0.2s;">
+            <div class="card-number">02</div>
+            <h3>Kultureller Impact</h3>
+            <p>Die „Beatlemania“ war weit mehr als nur ein Trend. Sie hatte weltweit einfluss auf Jugendliche und Erwachsene. Die Beatles waren die ersten echten Weltstars der Popgeschichte.</p>
+        </article>
+
+        <article class="pro-card reveal-element" style="transition-delay: 0.4s;">
+            <div class="card-number">03</div>
+            <h3>Statistische Dominanz</h3>
+            <p>Mit schätzungsweise über 600 Millionen verkauften Platten führt die Gruppe die Liste der erfolgreichsten Bands weltweit an. </p>
+        </div>
+    </div>
+</section>
+
+       <section id="video-gallery" style="padding: 8rem 5%; background: var(--bg-color);">
+    <div class="section-header reveal-element">
+        <h2 class="section-title">Die größten Hymnen</h2>
+        <span class="red-line"></span>
+    </div>
+
+    <div class="video-grid">
+        <a href="https://www.youtube.com/watch?v=2Q_ZzBGPdqE" target="_blank" class="video-card reveal-element">
+            <div class="video-thumb-container">
+                <div class="play-overlay"></div>
+                <img src="https://img.youtube.com/vi/2Q_ZzBGPdqE/hqdefault.jpg" alt="Help!">
+            </div>
+            <div class="video-info">
+                <h4>Help!</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); text-transform: none;">Der am häufigsten gecoverte Song der Welt.</p>
+            </div>
+        </a>
+
+        <a href="https://www.youtube.com/watch?v=A_MjCqQoLLA" target="_blank" class="video-card reveal-element" style="transition-delay: 0.2s;">
+            <div class="video-thumb-container">
+                <div class="play-overlay"></div>
+                <img src="https://img.youtube.com/vi/A_MjCqQoLLA/maxresdefault.jpg" alt="Hey Jude">
+            </div>
+            <div class="video-info">
+                <h4>Hey Jude</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); text-transform: none;">Eine Hymne für die Ewigkeit (1968).</p>
+            </div>
+        </a>
+
+        <a href="https://www.youtube.com/watch?v=QDYfEBY9NM4" target="_blank" class="video-card reveal-element" style="transition-delay: 0.4s;">
+            <div class="video-thumb-container">
+                <div class="play-overlay"></div>
+                <img src="https://img.youtube.com/vi/QDYfEBY9NM4/maxresdefault.jpg" alt="Let It Be">
+            </div>
+            <div class="video-info">
+                <h4>Let It Be</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); text-transform: none;">Das emotionale Finale der Bandgeschichte.</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+        <!-- TIMELINE -->
+        <section id="timeline">
+            <div class="section-header reveal-element text-center center">
+                <h2 class="section-title">Die Chronik</h2>
+                <span class="red-line center"></span>
+                
+            </div>
+
+            <div class="timeline-container">
+                <div class="timeline-item reveal-element">
+                    <span class="timeline-year">1960</span>
+                    <div class="timeline-content">
+                        <h4>Hamburg</h4>
+                        <p>Nächtelanges spielen, teilweise 8 Stunden am Stück</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal-element">
+                    <span class="timeline-year">1963</span>
+                    <div class="timeline-content">
+                        <h4>Please Please Me</h4>
+                        <p>Das erste Album. Aufgenommen an einem einzigen Tag. Beatlemania nimmt fahrt auf.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal-element">
+                    <span class="timeline-year">1964</span>
+                    <div class="timeline-content">
+                        <h4>Die Ed Sullivan Show</h4>
+                        <p>Die Kriminalitätsrate sinkt in New York für eine Stunde auf null.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal-element">
+                    <span class="timeline-year">1967</span>
+                    <div class="timeline-content">
+                        <h4>Sgt. Pepper's</h4>
+                        <p>Sie starten sich neu zu erfinden.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal-element">
+                    <span class="timeline-year">1969</span>
+                    <div class="timeline-content">
+                        <h4>Das Dach</h4>
+                        <p>Auf dem Dach der Apple-Zentrale in London. Der letzte gemeinsame Live-Auftritt der Band. Die Polizei schaltet den Strom ab.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="quiz-section">
+    <div class="section-header reveal-element center text-center">
+        <h2 class="section-title">Beatles Check</h2>
+        <span class="red-line center"></span>
+    </div>
+
+    <div class="quiz-container reveal-element">
+        <div id="quiz-box">
+            <p class="question-text" id="question">Lade Quiz...</p>
+            <div class="options-container" id="options">
+                </div>
+            <p id="quiz-feedback"></p>
+            
+            <button id="next-quiz-btn" onclick="generateQuiz()" style="margin-top: 2rem; background: transparent; border: 1px solid var(--red-accent); color: var(--red-accent); padding: 0.8rem 1.5rem; cursor: pointer; font-family: var(--font-display); text-transform: uppercase; width: 100%; transition: 0.3s;">
+                Anderes Quiz generieren
+            </button>
+        </div>
+    </div>
+</section>
+    </main>
+
+    <footer>
+        <p>Lukas Eifertinger &copy; </p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. PRELOADER ENTFERNEN
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none'; 
+                }, 800);
+            }, 300);
+
+            // 2. BULLETPROOF SCROLL REVEAL (Intersection Observer)
+            const revealElements = document.querySelectorAll('.reveal-element');
+            
+            const revealOptions = {
+                threshold: 0,
+                rootMargin: "0px 0px -10% 0px" 
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
+
+            // 3. PARALLAX FÜR DEN HERO BEREICH (Deaktiviert auf Handys)
+            if (window.innerWidth > 768) {
+                const hero = document.getElementById('hero');
+                const heroContent = hero.querySelector('.hero-content');
+                
+                window.addEventListener('scroll', () => {
+                    let scrollPosition = window.pageYOffset || window.scrollY;
+                    if(scrollPosition < window.innerHeight) {
+                        heroContent.style.transform = `translateY(${scrollPosition * 0.4}px)`;
+                        heroContent.style.opacity = 1 - (scrollPosition / window.innerHeight) * 1.5;
+                    }
+                });
+            }
+        });
+
+   const beatlesQuizzes = [
+    {
+        q: "Aus welcher Stadt kommen die Beatles?",
+        a: [
+            { text: "London", correct: false },
+            { text: "Liverpool", correct: true },
+            { text: "Manchester", correct: false },
+            { text: "Birmingham", correct: false }
+        ],
+        info: "Richtig! Liverpool ist die Geburtsstadt der Fab Four."
+    },
+    {
+        q: "Welches Album zeigt die Band auf einem Zebrastreifen?",
+        a: [
+            { text: "Let It Be", correct: false },
+            { text: "Abbey Road", correct: true },
+            { text: "Help!", correct: false },
+            { text: "Revolver", correct: false }
+        ],
+        info: "Exakt! Abbey Road ist wohl das bekannteste Cover der Welt."
+    },
+    {
+        q: "Welche Farbe hat das berühmte U-Boot im Beatles-Song?",
+        a: [
+            { text: "Rot", correct: false },
+            { text: "Blau", correct: false },
+            { text: "Gelb", correct: true },
+            { text: "Grün", correct: false }
+        ],
+        info: "Yellow Submarine! Ein Klassiker, den jedes Kind kennt."
+    },
+    {
+        q: "Wer war der Schlagzeuger der Beatles?",
+        a: [
+            { text: "Mick Jagger", correct: false },
+            { text: "Keith Richards", correct: false },
+            { text: "Ringo Starr", correct: true },
+            { text: "Paul McCartney", correct: false }
+        ],
+        info: "Richtig! Ringo Starr saß ab 1962 an den Drums."
+    },
+    {
+        q: "Wie viele Mitglieder hatten die Beatles in ihrer berühmtesten Besetzung?",
+        a: [
+            { text: "3", correct: false },
+            { text: "4", correct: true },
+            { text: "5", correct: false },
+            { text: "6", correct: false }
+        ],
+        info: "Genau, die 'Fab Four' bestanden aus John, Paul, George und Ringo."
+    }
+];
+
+function generateQuiz() {
+    const feedback = document.getElementById('quiz-feedback');
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    
+    // Zufällige Frage wählen
+    const randomIdx = Math.floor(Math.random() * beatlesQuizzes.length);
+    const quiz = beatlesQuizzes[randomIdx];
+
+    // Reset
+    feedback.innerText = "";
+    optionsEl.innerHTML = "";
+    questionEl.innerText = quiz.q;
+
+    // Optionen erstellen
+    quiz.a.forEach(answer => {
+        const btn = document.createElement('button');
+        btn.innerText = answer.text;
+        btn.classList.add('option-btn');
+        btn.onclick = () => {
+            // Alle Buttons sperren
+            const allBtns = optionsEl.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.style.pointerEvents = 'none');
+
+            if (answer.correct) {
+                btn.classList.add('correct');
+                feedback.innerText = quiz.info;
+                feedback.style.color = "#27ae60";
+            } else {
+                btn.classList.add('wrong');
+                feedback.innerText = "Leider falsch, versuch's nochmal!";
+                feedback.style.color = "var(--red-accent)";
+                // Richtige Antwort markieren
+                allBtns.forEach((b, idx) => {
+                    if(quiz.a[idx].correct) b.classList.add('correct');
+                });
+            }
+        };
+        optionsEl.appendChild(btn);
+    });
+}
+
+// Beim ersten Laden direkt ein Quiz generieren
+window.addEventListener('DOMContentLoaded', generateQuiz);
+    </script>
+</body>
+</html>
